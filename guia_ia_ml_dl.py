@@ -223,6 +223,7 @@ def ejemplo_regresion():
     print(f"\nMAE: {mae:.2f}")
     print(f"RMSE: {rmse:.2f}")
 
+    # Aquí el modelo usa lo que aprendió durante el entrenamiento:
     nueva_casa = pd.DataFrame({
         "metros_cuadrados": [110],
         "habitaciones": [4]
@@ -231,6 +232,15 @@ def ejemplo_regresion():
     precio_estimado = modelo.predict(nueva_casa)
 
     print(f"\nPrecio estimado para una casa de 110 m2 y 4 habitaciones: {precio_estimado[0]:.2f}")
+
+    nuevas_casas = pd.DataFrame({
+    "metros_cuadrados": [110, 130, 150],
+    "habitaciones": [4, 4, 5]
+            })
+
+    precios_estimados = modelo.predict(nuevas_casas)
+
+    print(f"Precios estimados para nuevas casas: {precios_estimados[0]:.2f}, {precios_estimados[1]:.2f}, {precios_estimados[2]:.2f}")
 
 
 ejemplo_regresion()
