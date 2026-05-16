@@ -71,6 +71,162 @@ Para ejecutar este proyecto necesitas tener instalado:
 * pip
 * Entorno virtual recomendado
 
+
+## Instalación correcta en macOS con entorno virtual
+
+En macOS, especialmente si Python fue instalado con Homebrew, puede aparecer el error:
+
+```bash
+error: externally-managed-environment
+```
+
+Esto ocurre porque el sistema evita instalar paquetes directamente sobre el Python global. La forma recomendada es usar un entorno virtual.
+
+---
+
+### 1. Crear el entorno virtual
+
+Desde la carpeta raíz del proyecto:
+
+```bash
+python3 -m venv .venv
+```
+
+---
+
+### 2. Activar el entorno virtual
+
+```bash
+source .venv/bin/activate
+```
+
+Cuando esté activo, deberías ver algo como esto en la terminal:
+
+```bash
+(.venv) admin@admins-MacBook-Pro IA_ML_DL_python_fundamentos %
+```
+
+---
+
+### 3. Actualizar pip dentro del entorno virtual
+
+```bash
+python -m pip install --upgrade pip
+```
+
+---
+
+### 4. Instalar las dependencias del proyecto
+
+```bash
+python -m pip install numpy pandas scikit-learn matplotlib pillow
+```
+
+---
+
+### 5. Verificar que las dependencias fueron instaladas correctamente
+
+```bash
+python -c "import numpy, pandas, sklearn, matplotlib, PIL; print('Dependencias OK')"
+```
+
+Si todo está correcto, deberías ver:
+
+```bash
+Dependencias OK
+```
+
+---
+
+### 6. Ejecutar la guía
+
+```bash
+python guia_ia_ml_dl.py
+```
+
+---
+
+## Solución al error `ModuleNotFoundError: No module named 'numpy'`
+
+Si aparece este error:
+
+```bash
+ModuleNotFoundError: No module named 'numpy'
+```
+
+significa que las dependencias no fueron instaladas dentro del entorno virtual activo.
+
+Para solucionarlo:
+
+```bash
+source .venv/bin/activate
+python -m pip install numpy pandas scikit-learn matplotlib pillow
+python guia_ia_ml_dl.py
+```
+
+---
+
+## Generar archivo `requirements.txt`
+
+Una vez instaladas las dependencias dentro del entorno virtual, puedes generar el archivo `requirements.txt` con:
+
+```bash
+python -m pip freeze > requirements.txt
+```
+
+Este archivo permite que otra persona pueda instalar las mismas dependencias con:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+---
+
+## Archivo `.gitignore`
+
+Es recomendable no subir el entorno virtual al repositorio.
+
+Crea el archivo `.gitignore`:
+
+```bash
+touch .gitignore
+```
+
+Agrega el siguiente contenido:
+
+```gitignore
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+outputs/
+```
+
+---
+
+## Commit recomendado
+
+Después de actualizar el README, crear el `requirements.txt` y agregar el `.gitignore`, puedes hacer el commit con:
+
+```bash
+git add README.md requirements.txt .gitignore
+git commit -m "docs: add setup instructions for virtual environment"
+git push origin master
+```
+
+---
+
+## Nota importante
+
+No se recomienda usar:
+
+```bash
+--break-system-packages
+```
+
+Ese comando puede afectar la instalación global de Python en macOS. La práctica recomendada es trabajar siempre con un entorno virtual `.venv`.
+
+
 ---
 
 ## 4. Crear entorno virtual
