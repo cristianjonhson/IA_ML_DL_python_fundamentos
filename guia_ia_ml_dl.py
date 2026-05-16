@@ -310,9 +310,9 @@ def ejemplo_clasificacion():
     resultado = modelo.predict(nuevo_cliente)
 
     if resultado[0] == 1:
-        print("\nPredicción: El cliente probablemente comprará.")
+        print("\nPredicción: El nuevo cliente probablemente comprará.")
     else:
-        print("\nPredicción: El cliente probablemente no comprará.")
+        print("\nPredicción: El nuevo cliente probablemente no comprará.")
 
 
 ejemplo_clasificacion()
