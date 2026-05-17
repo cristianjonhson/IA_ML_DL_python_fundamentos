@@ -504,6 +504,15 @@ def ejemplo_clasificacion():
     print("\nReporte de clasificación:")
     print(classification_report(y_test, predicciones))
 
+    matriz_confusion = confusion_matrix(y_test, predicciones)
+    print("\nMatriz de confusión:")
+    print(matriz_confusion)
+    print("\nInterpretación de la matriz de confusión:")
+    print("- Verdaderos positivos (TP):", matriz_confusion[1, 1])
+    print("- Verdaderos negativos (TN):", matriz_confusion[0, 0])
+    print("- Falsos positivos (FP):", matriz_confusion[0, 1])
+    print("- Falsos negativos (FN):", matriz_confusion[1, 0])
+
     nuevo_cliente = pd.DataFrame({
         "edad": [28],
         "visitas_web": [6]
@@ -516,14 +525,9 @@ def ejemplo_clasificacion():
     else:
         print("\nPredicción: El nuevo cliente probablemente no comprará.")
 
-    matriz_confusion = confusion_matrix(y_test, predicciones)
-    print("\nMatriz de confusión:")
-    print(matriz_confusion)
-    print("\nInterpretación de la matriz de confusión:")
-    print("- Verdaderos positivos (TP):", matriz_confusion[1, 1])
-    print("- Verdaderos negativos (TN):", matriz_confusion[0, 0])
-    print("- Falsos positivos (FP):", matriz_confusion[0, 1])
-    print("- Falsos negativos (FN):", matriz_confusion[1, 0])
+
+
+
 
 
 ejemplo_clasificacion()
