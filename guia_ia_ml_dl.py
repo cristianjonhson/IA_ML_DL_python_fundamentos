@@ -681,6 +681,86 @@ def ejemplo_clustering():
     print(df)
 
 
+# --------------------------------------------------------
+# GRAFICOS DE CLUSTERING
+# --------------------------------------------------------
+def graficos_clustering(df, modelo):
+    """
+    Genera visualizaciones para clustering.
+
+    Gráficos:
+    - Segmentación de clientes por ingresos y gasto mensual.
+    - Centros de cada cluster.
+    - Gráfico interactivo.
+    """
+
+    print("\nGenerando gráficos de clustering...")
+
+    centros = pd.DataFrame(
+        modelo.cluster_centers_,
+        columns=["ingresos", "gasto_mensual"]
+    )
+
+    # --------------------------------------------------------
+    # Gráfico estático
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(9, 6))
+
+    for grupo in sorted(df["grupo"].unique()):
+        subset = df[df["grupo"] == grupo]
+
+        plt.scatter(
+            subset["ingresos"],
+            subset["gasto_mensual"],
+            label=f"Grupo {grupo}"
+        )
+
+    plt.scatter(
+        centros["ingresos"],
+        centros["gasto_mensual"],
+        marker="X",
+        s=180,
+        label="Centroides"
+    )
+
+    plt.title("Clustering: segmentación de clientes")
+    plt.xlabel("Ingresos")
+    plt.ylabel("Gasto mensual")
+    plt.legend()
+    plt.grid(True)
+
+    guardar_grafico_estatico("07_clustering_clientes.png")
+
+    # --------------------------------------------------------
+    # Gráfico interactivo
+    # --------------------------------------------------------
+
+    if PLOTLY_DISPONIBLE:
+        df_interactivo = df.copy()
+        df_interactivo["grupo"] = df_interactivo["grupo"].astype(str)
+
+        fig = px.scatter(
+            df_interactivo,
+            x="ingresos",
+            y="gasto_mensual",
+            color="grupo",
+            hover_data=["grupo"],
+            title="Clustering interactivo: segmentación de clientes"
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=centros["ingresos"],
+                y=centros["gasto_mensual"],
+                mode="markers",
+                name="Centroides",
+                marker=dict(size=14, symbol="x")
+            )
+        )
+
+        guardar_grafico_interactivo(fig, "08_clustering_interactivo.html")
+
 ejemplo_clustering()
 
 
