@@ -445,7 +445,6 @@ def ejemplo_regresion():
     precios_estimados=precios_estimados
     )
 
-
 ejemplo_regresion()
 
 
@@ -466,7 +465,7 @@ Ejemplos:
 """
 
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 
 def ejemplo_clasificacion():
