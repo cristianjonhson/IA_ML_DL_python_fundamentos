@@ -525,8 +525,11 @@ def ejemplo_clasificacion():
     else:
         print("\nPredicción: El nuevo cliente probablemente no comprará.")
 
-
-
+    graficos_clasificacion(
+        df=df,
+        nuevo_cliente=nuevo_cliente,
+        matriz_confusion=matriz_confusion
+        )
 
 # --------------------------------------------------------
 #  GRAFICOS DE CLASIFICACIÓN
