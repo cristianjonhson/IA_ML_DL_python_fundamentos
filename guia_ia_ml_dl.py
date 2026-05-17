@@ -238,6 +238,143 @@ def guardar_grafico_interactivo(figura, nombre_archivo):
     print(f"Gráfico interactivo guardado: {ruta}")
 
 
+# ============================================================
+# GRAFICOS DE REGRESIÓN
+# ============================================================
+def graficos_regresion(
+    df,
+    modelo,
+    X_test,
+    y_test,
+    predicciones,
+    nueva_casa,
+    precio_estimado,
+    nuevas_casas,
+    precios_estimados
+):
+    """
+    Genera visualizaciones para el ejemplo de regresión.
+
+    Gráficos:
+    - Relación metros cuadrados vs precio.
+    - Línea estimada para casas de 4 habitaciones.
+    - Comparación entre valores reales y predichos.
+    - Gráfico interactivo con Plotly.
+    """
+
+    print("\nGenerando gráficos de regresión...")
+
+    # --------------------------------------------------------
+    # Gráfico estático 1: dispersión + línea estimada
+    # --------------------------------------------------------
+
+    metros_linea = np.linspace(
+        df["metros_cuadrados"].min(),
+        df["metros_cuadrados"].max(),
+        100
+    )
+
+    datos_linea = pd.DataFrame({
+        "metros_cuadrados": metros_linea,
+        "habitaciones": [4] * len(metros_linea)
+    })
+
+    precios_linea = modelo.predict(datos_linea)
+
+    plt.figure(figsize=(9, 6))
+    plt.scatter(
+        df["metros_cuadrados"],
+        df["precio"],
+        label="Datos reales"
+    )
+
+    plt.plot(
+        metros_linea,
+        precios_linea,
+        label="Tendencia estimada con 4 habitaciones"
+    )
+
+    plt.scatter(
+        nueva_casa["metros_cuadrados"],
+        precio_estimado,
+        marker="X",
+        s=120,
+        label="Nueva casa"
+    )
+
+    plt.title("Regresión: metros cuadrados vs precio")
+    plt.xlabel("Metros cuadrados")
+    plt.ylabel("Precio")
+    plt.legend()
+    plt.grid(True)
+
+    guardar_grafico_estatico("01_regresion_metros_precio.png")
+
+    # --------------------------------------------------------
+    # Gráfico estático 2: real vs predicho
+    # --------------------------------------------------------
+
+    comparacion = pd.DataFrame({
+        "precio_real": y_test.values,
+        "precio_predicho": predicciones
+    })
+
+    comparacion.plot(kind="bar", figsize=(8, 5))
+
+    plt.title("Regresión: precio real vs precio predicho")
+    plt.xlabel("Casas del conjunto de prueba")
+    plt.ylabel("Precio")
+    plt.grid(True)
+
+    guardar_grafico_estatico("02_regresion_real_vs_predicho.png")
+
+    # --------------------------------------------------------
+    # Gráfico interactivo: dispersión + predicción
+    # --------------------------------------------------------
+
+    if PLOTLY_DISPONIBLE:
+        fig = px.scatter(
+            df,
+            x="metros_cuadrados",
+            y="precio",
+            size="habitaciones",
+            hover_data=["habitaciones"],
+            title="Regresión interactiva: metros cuadrados vs precio"
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=metros_linea,
+                y=precios_linea,
+                mode="lines",
+                name="Tendencia estimada con 4 habitaciones"
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=nueva_casa["metros_cuadrados"],
+                y=precio_estimado,
+                mode="markers",
+                name="Nueva casa predicha",
+                marker=dict(size=14, symbol="x")
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=nuevas_casas["metros_cuadrados"],
+                y=precios_estimados,
+                mode="markers+text",
+                name="Nuevas casas predichas",
+                text=[f"{precio:.0f}" for precio in precios_estimados],
+                textposition="top center"
+            )
+        )
+
+        guardar_grafico_interactivo(fig, "03_regresion_interactiva.html")
+
+
 def ejemplo_regresion():
     print("\n=== EJEMPLO DE REGRESIÓN ===\n")
 
