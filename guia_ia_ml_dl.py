@@ -528,6 +528,113 @@ def ejemplo_clasificacion():
 
 
 
+# --------------------------------------------------------
+#  GRAFICOS DE CLASIFICACIÓN
+# --------------------------------------------------------
+def graficos_clasificacion(df, nuevo_cliente, matriz_confusion):
+    """
+    Genera visualizaciones para el ejemplo de clasificación.
+
+    Gráficos:
+    - Dispersión de clientes según edad y visitas web.
+    - Matriz de confusión.
+    - Gráfico interactivo con Plotly.
+    """
+
+    print("\nGenerando gráficos de clasificación...")
+
+    # --------------------------------------------------------
+    # Gráfico estático 1: clientes compra/no compra
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(9, 6))
+
+    for clase in sorted(df["compro"].unique()):
+        subset = df[df["compro"] == clase]
+        etiqueta = "Compró" if clase == 1 else "No compró"
+
+        plt.scatter(
+            subset["edad"],
+            subset["visitas_web"],
+            label=etiqueta
+        )
+
+    plt.scatter(
+        nuevo_cliente["edad"],
+        nuevo_cliente["visitas_web"],
+        marker="X",
+        s=120,
+        label="Nuevo cliente"
+    )
+
+    plt.title("Clasificación: clientes según edad y visitas web")
+    plt.xlabel("Edad")
+    plt.ylabel("Visitas web")
+    plt.legend()
+    plt.grid(True)
+
+    guardar_grafico_estatico("04_clasificacion_clientes.png")
+
+    # --------------------------------------------------------
+    # Gráfico estático 2: matriz de confusión
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(6, 5))
+    plt.imshow(matriz_confusion)
+
+    plt.title("Matriz de confusión")
+    plt.xlabel("Predicción")
+    plt.ylabel("Valor real")
+
+    etiquetas = ["No compró", "Compró"]
+    plt.xticks([0, 1], etiquetas)
+    plt.yticks([0, 1], etiquetas)
+
+    for i in range(matriz_confusion.shape[0]):
+        for j in range(matriz_confusion.shape[1]):
+            plt.text(
+                j,
+                i,
+                matriz_confusion[i, j],
+                ha="center",
+                va="center"
+            )
+
+    guardar_grafico_estatico("05_clasificacion_matriz_confusion.png")
+
+    # --------------------------------------------------------
+    # Gráfico interactivo
+    # --------------------------------------------------------
+
+    if PLOTLY_DISPONIBLE:
+        df_interactivo = df.copy()
+        df_interactivo["resultado"] = df_interactivo["compro"].map({
+            0: "No compró",
+            1: "Compró"
+        })
+
+        fig = px.scatter(
+            df_interactivo,
+            x="edad",
+            y="visitas_web",
+            color="resultado",
+            hover_data=["compro"],
+            title="Clasificación interactiva: clientes"
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=nuevo_cliente["edad"],
+                y=nuevo_cliente["visitas_web"],
+                mode="markers",
+                name="Nuevo cliente",
+                marker=dict(size=14, symbol="x")
+            )
+        )
+
+        guardar_grafico_interactivo(fig, "06_clasificacion_interactiva.html")
+
+
 
 
 ejemplo_clasificacion()
