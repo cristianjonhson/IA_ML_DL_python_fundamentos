@@ -680,6 +680,7 @@ def ejemplo_clustering():
     print("\nClientes agrupados:")
     print(df)
 
+    graficos_clustering(df, modelo)
 
 # --------------------------------------------------------
 # GRAFICOS DE CLUSTERING
