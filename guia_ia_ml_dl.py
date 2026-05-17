@@ -433,6 +433,18 @@ def ejemplo_regresion():
 
     print(f"Precios estimados para nuevas casas: {precios_estimados[0]:.2f}, {precios_estimados[1]:.2f}, {precios_estimados[2]:.2f}")
 
+    graficos_regresion(
+    df=df,
+    modelo=modelo,
+    X_test=X_test,
+    y_test=y_test,
+    predicciones=predicciones,
+    nueva_casa=nueva_casa,
+    precio_estimado=precio_estimado,
+    nuevas_casas=nuevas_casas,
+    precios_estimados=precios_estimados
+    )
+
 
 ejemplo_regresion()
 
