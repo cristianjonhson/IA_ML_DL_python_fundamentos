@@ -193,6 +193,50 @@ try:
 except ImportError:
     PLOTLY_DISPONIBLE = False
 
+# ============================================================
+# CONFIGURACIÓN DE VISUALIZACIONES
+# ============================================================
+
+OUTPUT_DIR = Path("outputs")
+
+
+def preparar_directorio_outputs():
+    """
+    Crea la carpeta outputs si no existe.
+    Aquí se guardarán los gráficos .png y .html.
+    """
+    OUTPUT_DIR.mkdir(exist_ok=True)
+
+
+def guardar_grafico_estatico(nombre_archivo):
+    """
+    Guarda un gráfico estático de Matplotlib dentro de outputs/.
+    """
+    preparar_directorio_outputs()
+    ruta = OUTPUT_DIR / nombre_archivo
+
+    plt.tight_layout()
+    plt.savefig(ruta, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    print(f"Gráfico estático guardado: {ruta}")
+
+
+def guardar_grafico_interactivo(figura, nombre_archivo):
+    """
+    Guarda un gráfico interactivo de Plotly dentro de outputs/.
+    """
+    if not PLOTLY_DISPONIBLE:
+        print("Plotly no está instalado. No se generó gráfico interactivo.")
+        return
+
+    preparar_directorio_outputs()
+    ruta = OUTPUT_DIR / nombre_archivo
+
+    figura.write_html(str(ruta))
+
+    print(f"Gráfico interactivo guardado: {ruta}")
+
 
 def ejemplo_regresion():
     print("\n=== EJEMPLO DE REGRESIÓN ===\n")
